@@ -155,11 +155,50 @@ class VKViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
 
     
     //MARK: VK DELEGATE FUNCS
-    func vkSdkNeedCaptchaEnter(captchaError: VKError) {}
-    func vkSdkTokenHasExpired(expiredToken: VKAccessToken) {}
-    func vkSdkUserDeniedAccess(authorizationError: VKError) {}
-    func vkSdkShouldPresentViewController(controller: UIViewController) {}
-    func vkSdkReceivedNewToken(newToken: VKAccessToken) {}
+    func vkSdkNeedCaptchaEnter(captchaError: VKError)
+    {
+        NSLog(
+            "!!! vkSdkNeedCaptchaEnter errorCode = %ld, errorMessage = %@, errorReason = %@, errorText = %@\n",
+            CLong(captchaError.errorCode),
+            captchaError.errorMessage,
+            captchaError.errorReason,
+            captchaError.errorText
+        );
+    }
+
+    func vkSdkTokenHasExpired(expiredToken: VKAccessToken)
+    {
+        NSLog(
+            "!!! vkSdkTokenHasExpired: isExpired = %ld, email = %@\n",
+            CLong(expiredToken.isExpired),
+            expiredToken.email
+        );
+    }
+
+    func vkSdkUserDeniedAccess(authorizationError: VKError)
+    {
+        NSLog(
+            "!!! vkSdkUserDeniedAccess errorCode = %ld, errorMessage = %@, errorReason = %@, errorText = %@\n",
+            CLong(authorizationError.errorCode),
+            authorizationError.errorMessage,
+            authorizationError.errorReason,
+            authorizationError.errorText
+        );
+    }
+
+    func vkSdkShouldPresentViewController(controller: UIViewController)
+    {
+        NSLog("vkSdkShouldPresentViewController\n");
+    }
+
+    func vkSdkReceivedNewToken(newToken: VKAccessToken)
+    {
+        NSLog(
+            "!!! vkSdkReceivedNewToken: isExpired = %ld, email = %@\n",
+            CLong(newToken.isExpired),
+            newToken.email
+        );
+    }
     //VK DELEGATE ENDS
 
 }
