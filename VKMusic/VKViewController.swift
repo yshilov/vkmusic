@@ -10,8 +10,9 @@ import UIKit
 import AVFoundation
 import MediaPlayer
 class VKViewController: UIViewController, UITableViewDelegate, UITableViewDataSource,VKSdkDelegate, UITextFieldDelegate {
-    let appID = "5126219"
+    let appID = "5292683"
     let popularSongs = ["Молодые ветра remix"]
+    
     var player = AVPlayer()
     var playlist = [Song]()
     var currentSongNumber : Int?
@@ -42,6 +43,10 @@ class VKViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
     }
     
     override func viewDidLoad() {
+        NSLog("AppID = %@\n", appID)
+        saveToFile("")
+        
+        
         super.viewDidLoad()
         UIApplication.sharedApplication().beginReceivingRemoteControlEvents()
         playlistTable.dataSource = self
@@ -53,7 +58,12 @@ class VKViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
             try AVAudioSession.sharedInstance().setActive(true)
         }
         catch {}
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "playNext", name: AVPlayerItemDidPlayToEndTimeNotification, object: player.currentItem)
+        NSNotificationCenter.defaultCenter().addObserver(
+            self,
+            selector: "playNext",
+            name: AVPlayerItemDidPlayToEndTimeNotification,
+            object: player.currentItem
+        )
         
     }
     override func remoteControlReceivedWithEvent(event: UIEvent?) {
@@ -125,16 +135,29 @@ class VKViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
         playlistTable.selectRowAtIndexPath(NSIndexPath(forRow: i, inSection: 0), animated: true, scrollPosition: .None)
         
     }
-    
+
+    func saveToFile(name: String)
+    {
+        let ass = NSFileManager()
+        if let url = ass.URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first {
+            let filepath =  url.URLByAppendingPathComponent("test.txt")
+            NSLog("(((%@)))\n", filepath)
+            let result = NSData(contentsOfURL: NSURL(string: "https://psv4.vk.me/c4693/u61905946/audios/3bb013bfcf32.mp3")!)
+            NSLog("DONE!\n")
+        }
+    }
+
     func getPlaylistFromVK(){
         request.executeWithResultBlock({
-            [unowned self, weak playlistTable = self.playlistTable] in
-            if let response = $0.json.objectForKey("items") as? [[String:AnyObject]] {
+            [unowned self, weak playlistTable = self.playlistTable] AAA in
+            if let response = (AAA.json.objectForKey("items")) as? [[String:AnyObject]] {
                 self.playlist.removeAll()
                 for item in response {
                     if let _ = NSURL(string: (item["url"] as? String ) ?? ""){
                         let song = Song(artist: item["artist"] as? String, title: item["title"] as? String, url: item["url"] as! String)
                         self.playlist.append(song)
+                        
+                        NSLog("<%@>\n\n", song.url)
                     }
 
                 }
