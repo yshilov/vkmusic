@@ -150,10 +150,10 @@ class VKViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
             VKSdk.authorize([VK_PER_FRIENDS, VK_PER_EMAIL, VK_PER_AUDIO])
         }
     }
-   
-   
 
-    
+
+
+
     //MARK: VK DELEGATE FUNCS
     func vkSdkNeedCaptchaEnter(captchaError: VKError)
     {
