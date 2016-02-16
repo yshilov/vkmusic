@@ -9,14 +9,18 @@
 import UIKit
 import AVFoundation
 import MediaPlayer
+//import VKSdkFramework
+
 class VKViewController: UIViewController, UITableViewDelegate, UITableViewDataSource,VKSdkDelegate, UITextFieldDelegate {
-    let appID = "5292683"
+    let appID = "5126219"
     let popularSongs = ["Молодые ветра remix"]
     
     var player = AVPlayer()
     var playlist = [Song]()
     var currentSongNumber : Int?
-    var request = VKRequest(method: "audio.get", andParameters: nil, andHttpMethod: "GET")
+    var request: VKRequest?;
+    var sdk: VKSdk?
+
     private struct Storyboard{
         static let CellReuseIdentifier = "Song"
     }
@@ -44,6 +48,8 @@ class VKViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
     
     override func viewDidLoad() {
         NSLog("AppID = %@\n", appID)
+        sdk = VKSdk.initializeWithAppId(appID)
+        sdk!.registerDelegate(self)
         saveToFile("")
         
         
@@ -52,7 +58,10 @@ class VKViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
         playlistTable.dataSource = self
         playlistTable.delegate = self
         connectToVK()
+        
+        request = VKRequest(method: "audio.get", parameters: nil)
         getPlaylistFromVK()
+        
         do{
             try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
             try AVAudioSession.sharedInstance().setActive(true)
@@ -81,7 +90,7 @@ class VKViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
     
     
     @IBAction func getInitialPlaylist(sender: AnyObject) {
-        request = VKRequest(method: "audio.get", andParameters: nil, andHttpMethod: "GET")
+        request = VKRequest(method: "audio.get", parameters: nil)
         getPlaylistFromVK()
         searchText = nil
     }
@@ -101,7 +110,7 @@ class VKViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
         searchText = popularSongs[0]
     }
     func loadPlaylistForQuery(q:String){
-        request = VKRequest(method: "audio.search", andParameters: ["q":q, "count":60], andHttpMethod: "GET")
+        request = VKRequest(method: "audio.search", parameters: ["q":q, "count":60])
         getPlaylistFromVK()
     }
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -138,26 +147,19 @@ class VKViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
 
     func saveToFile(name: String)
     {
-        let ass = NSFileManager()
-        if let url = ass.URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first {
-            let filepath =  url.URLByAppendingPathComponent("test.txt")
-            NSLog("(((%@)))\n", filepath)
-            let result = NSData(contentsOfURL: NSURL(string: "https://psv4.vk.me/c4693/u61905946/audios/3bb013bfcf32.mp3")!)
-            NSLog("DONE!\n")
-        }
     }
 
     func getPlaylistFromVK(){
-        request.executeWithResultBlock({
+        request!.executeWithResultBlock({
             [unowned self, weak playlistTable = self.playlistTable] AAA in
             if let response = (AAA.json.objectForKey("items")) as? [[String:AnyObject]] {
                 self.playlist.removeAll()
                 for item in response {
                     if let _ = NSURL(string: (item["url"] as? String ) ?? ""){
-                        let song = Song(artist: item["artist"] as? String, title: item["title"] as? String, url: item["url"] as! String)
+                        let song = Song(artist: item["artist"] as! String, title: item["title"] as! String, id: item["id"] as! NSNumber, url: item["url"] as! String)
                         self.playlist.append(song)
                         
-                        NSLog("<%@>\n\n", song.url)
+                        NSLog("ID = %@\n", song.id)
                     }
 
                 }
@@ -166,69 +168,53 @@ class VKViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
         }, errorBlock: nil)
 
     }
+    
+    
     func connectToVK(){
-        VKSdk.initializeWithDelegate(self, andAppId: appID)
-        if VKSdk.wakeUpSession() {
-        }else{
-            VKSdk.authorize([VK_PER_FRIENDS, VK_PER_EMAIL, VK_PER_AUDIO])
-        }
+        NSLog("Connect begin");
+        
+        VKSdk.wakeUpSession(
+            [VK_PER_AUDIO],
+
+            completeBlock: {
+                if( $0 == .Authorized)
+                {
+                    NSLog("wakeUpSession: authorized")
+                }else if( $0 == .Initialized)
+                {
+                    NSLog("wakeUpSession: initialized")
+                    VKSdk.authorize([VK_PER_AUDIO])
+                }else
+                {
+                    NSLog("wakeUpSession: status code %ld\n", CLong($0.rawValue))
+                }
+
+                if ($1 != nil) {
+                    NSLog("Error")
+                }
+            }
+        )
     }
 
 
 
-
-    //MARK: VK DELEGATE FUNCS
-    func vkSdkNeedCaptchaEnter(captchaError: VKError)
+    func vkSdkAccessAuthorizationFinishedWithResult(result: VKAuthorizationResult)
     {
-        NSLog(
-            "!!! vkSdkNeedCaptchaEnter errorCode = %ld, errorMessage = %@, errorReason = %@, errorText = %@\n",
-            CLong(captchaError.errorCode),
-            captchaError.errorMessage,
-            captchaError.errorReason,
-            captchaError.errorText
-        );
+        NSLog("vkSdkAccessAuthorizationFinishedWithResult")
     }
-
-    func vkSdkTokenHasExpired(expiredToken: VKAccessToken)
+    
+    func vkSdkUserAuthorizationFailed()
     {
-        NSLog(
-            "!!! vkSdkTokenHasExpired: isExpired = %ld, email = %@\n",
-            CLong(expiredToken.isExpired),
-            expiredToken.email
-        );
-    }
-
-    func vkSdkUserDeniedAccess(authorizationError: VKError)
-    {
-        NSLog(
-            "!!! vkSdkUserDeniedAccess errorCode = %ld, errorMessage = %@, errorReason = %@, errorText = %@\n",
-            CLong(authorizationError.errorCode),
-            authorizationError.errorMessage,
-            authorizationError.errorReason,
-            authorizationError.errorText
-        );
-    }
-
-    func vkSdkShouldPresentViewController(controller: UIViewController)
-    {
-        NSLog("vkSdkShouldPresentViewController\n");
-    }
-
-    func vkSdkReceivedNewToken(newToken: VKAccessToken)
-    {
-        NSLog(
-            "!!! vkSdkReceivedNewToken: isExpired = %ld, email = %@\n",
-            CLong(newToken.isExpired),
-            newToken.email
-        );
+        NSLog("vkSdkUserAuthorizationFailed")
     }
     //VK DELEGATE ENDS
 
 }
 
 struct Song{
-    var artist : String?
-    var title : String?
-    var url : String
+    var artist : String
+    var  title : String
+    var     id : NSNumber
+    var    url : String
     
 }
