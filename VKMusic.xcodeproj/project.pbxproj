@@ -12,6 +12,7 @@
 		9D2F85361BE2752D00D609F1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9D2F85341BE2752D00D609F1 /* Main.storyboard */; };
 		9D2F85381BE2752D00D609F1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9D2F85371BE2752D00D609F1 /* Assets.xcassets */; };
 		9D2F853B1BE2752D00D609F1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9D2F85391BE2752D00D609F1 /* LaunchScreen.storyboard */; };
+		9D3B4F8B1C73C90600FC6D91 /* LogViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D3B4F8A1C73C90600FC6D91 /* LogViewController.swift */; };
 		C42B3A841C728DA3004989AE /* VKSdkFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C42B3A831C728D82004989AE /* VKSdkFramework.framework */; };
 		C42B3A851C728DA3004989AE /* VKSdkFramework.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = C42B3A831C728D82004989AE /* VKSdkFramework.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
@@ -69,6 +70,7 @@
 		9D2F85371BE2752D00D609F1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9D2F853A1BE2752D00D609F1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9D2F853C1BE2752D00D609F1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		9D3B4F8A1C73C90600FC6D91 /* LogViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogViewController.swift; sourceTree = "<group>"; };
 		C42B3A781C728D82004989AE /* VK-ios-sdk.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "VK-ios-sdk.xcodeproj"; path = "vk-ios-sdk/VK-ios-sdk.xcodeproj"; sourceTree = SOURCE_ROOT; };
 		C4FEAD251C7294E100A8D1DA /* VKMusic-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "VKMusic-Bridging-Header.h"; path = "VKMusic/VKMusic-Bridging-Header.h"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -108,6 +110,7 @@
 				C42B3A781C728D82004989AE /* VK-ios-sdk.xcodeproj */,
 				9D2F85301BE2752D00D609F1 /* AppDelegate.swift */,
 				9D2F85321BE2752D00D609F1 /* VKViewController.swift */,
+				9D3B4F8A1C73C90600FC6D91 /* LogViewController.swift */,
 				9D2F85341BE2752D00D609F1 /* Main.storyboard */,
 				9D2F85371BE2752D00D609F1 /* Assets.xcassets */,
 				9D2F85391BE2752D00D609F1 /* LaunchScreen.storyboard */,
@@ -229,6 +232,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9D3B4F8B1C73C90600FC6D91 /* LogViewController.swift in Sources */,
 				9D2F85331BE2752D00D609F1 /* VKViewController.swift in Sources */,
 				9D2F85311BE2752D00D609F1 /* AppDelegate.swift in Sources */,
 			);

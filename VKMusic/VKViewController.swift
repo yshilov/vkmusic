@@ -10,7 +10,7 @@ import UIKit
 import AVFoundation
 import MediaPlayer
 //import VKSdkFramework
-
+var logsArray = [String]()
 class VKViewController: UIViewController, UITableViewDelegate, UITableViewDataSource,VKSdkDelegate, UITextFieldDelegate {
     let appID = "5126219"
     let popularSongs = ["Молодые ветра remix"]
@@ -48,6 +48,7 @@ class VKViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
     
     override func viewDidLoad() {
         NSLog("AppID = %@\n", appID)
+        logsArray.append("AppID = \(appID)")
         sdk = VKSdk.initializeWithAppId(appID)
         sdk!.registerDelegate(self)
         saveToFile("")
@@ -160,6 +161,7 @@ class VKViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
                         self.playlist.append(song)
                         
                         NSLog("ID = %@\n", song.id)
+                        logsArray.append("ID = \(song.id)")
                     }
 
                 }
@@ -172,7 +174,7 @@ class VKViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
     
     func connectToVK(){
         NSLog("Connect begin");
-        
+        logsArray.append("Connect begin")
         VKSdk.wakeUpSession(
             [VK_PER_AUDIO],
 
@@ -180,17 +182,21 @@ class VKViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
                 if( $0 == .Authorized)
                 {
                     NSLog("wakeUpSession: authorized")
+                    logsArray.append("wakeUpSession: authorized")
                 }else if( $0 == .Initialized)
                 {
                     NSLog("wakeUpSession: initialized")
+                    logsArray.append("wakeUpSession: initialized")
                     VKSdk.authorize([VK_PER_AUDIO])
                 }else
                 {
                     NSLog("wakeUpSession: status code %ld\n", CLong($0.rawValue))
+                    logsArray.append("wakeUpSession: status code \($0.rawValue)")
                 }
 
                 if ($1 != nil) {
                     NSLog("Error")
+                    logsArray.append("Error")
                 }
             }
         )
@@ -201,11 +207,13 @@ class VKViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
     func vkSdkAccessAuthorizationFinishedWithResult(result: VKAuthorizationResult)
     {
         NSLog("vkSdkAccessAuthorizationFinishedWithResult")
+        logsArray.append("vkSdkAccessAuthorizationFinishedWithResult")
     }
     
     func vkSdkUserAuthorizationFailed()
     {
         NSLog("vkSdkUserAuthorizationFailed")
+        logsArray.append("vkSdkUserAuthorizationFailed")
     }
     //VK DELEGATE ENDS
 

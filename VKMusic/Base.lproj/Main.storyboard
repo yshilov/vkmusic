@@ -108,10 +108,10 @@
             </objects>
             <point key="canvasLocation" x="740" y="220"/>
         </scene>
-        <!--View Controller-->
+        <!--Log View Controller-->
         <scene sceneID="UyP-vQ-IFT">
             <objects>
-                <viewController id="FUR-F6-pl0" sceneMemberID="viewController">
+                <viewController id="FUR-F6-pl0" customClass="LogViewController" customModule="VKMusic" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="9PX-OS-g0T"/>
                         <viewControllerLayoutGuide type="bottom" id="iHR-De-7Ou"/>
@@ -119,8 +119,26 @@
                     <view key="view" contentMode="scaleToFill" id="keI-hk-bGT">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="N32-ef-mBf">
+                                <rect key="frame" x="16" y="72" width="288" height="488"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="N32-ef-mBf" firstAttribute="top" secondItem="9PX-OS-g0T" secondAttribute="bottom" constant="8" symbolic="YES" id="5mL-MM-JJb"/>
+                            <constraint firstItem="iHR-De-7Ou" firstAttribute="top" secondItem="N32-ef-mBf" secondAttribute="bottom" constant="8" symbolic="YES" id="a8Y-I0-QhJ"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="N32-ef-mBf" secondAttribute="trailing" id="hLt-5w-cgq"/>
+                            <constraint firstItem="N32-ef-mBf" firstAttribute="leading" secondItem="keI-hk-bGT" secondAttribute="leadingMargin" id="k4c-FY-Cc0"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="logTextField" destination="N32-ef-mBf" id="GM7-1Y-3vB"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ZYs-4o-0AD" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
